@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import java.math.BigDecimal
 
 class HodlBotDaoTest {
 
@@ -32,7 +33,10 @@ class HodlBotDaoTest {
             type = BotType.KNIFE_CATCH,
             ticker = "BTC",
             currency = "KRW",
-            status = BotStatus.RUNNING
+            low = BigDecimal(100),
+            high = BigDecimal(100),
+            girdCount = 10,
+            status = BotStatus.CREATED
         )
 
         database.hodlBotDao().upsert(bot)
@@ -51,7 +55,10 @@ class HodlBotDaoTest {
             type = BotType.KNIFE_CATCH,
             ticker = "BTC",
             currency = "KRW",
-            status = BotStatus.RUNNING
+            low = BigDecimal(100),
+            high = BigDecimal(100),
+            girdCount = 10,
+            status = BotStatus.CREATED
         )
 
         val bot2 = HodlBot(
@@ -59,7 +66,10 @@ class HodlBotDaoTest {
             type = BotType.KNIFE_CATCH,
             ticker = "BTC",
             currency = "KRW",
-            status = BotStatus.RUNNING
+            low = BigDecimal(100),
+            high = BigDecimal(100),
+            girdCount = 10,
+            status = BotStatus.CREATED
         )
 
         database.hodlBotDao().upsert(bot1)
@@ -77,7 +87,10 @@ class HodlBotDaoTest {
             type = BotType.KNIFE_CATCH,
             ticker = "BTC",
             currency = "KRW",
-            status = BotStatus.RUNNING
+            low = BigDecimal(100),
+            high = BigDecimal(100),
+            girdCount = 10,
+            status = BotStatus.CREATED
         )
 
         val bot2 = HodlBot(
@@ -85,7 +98,10 @@ class HodlBotDaoTest {
             type = BotType.KNIFE_CATCH,
             ticker = "BTC",
             currency = "KRW",
-            status = BotStatus.RUNNING
+            low = BigDecimal(100),
+            high = BigDecimal(100),
+            girdCount = 10,
+            status = BotStatus.CREATED
         )
 
         database.hodlBotDao().upsert(bot1)
