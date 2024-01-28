@@ -17,7 +17,7 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDataBase(@ApplicationContext context: Context): HodlDatabase {
+    fun provideHodlDataBase(@ApplicationContext context: Context): HodlDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
             HodlDatabase::class.java,
