@@ -17,6 +17,19 @@ class HodlBotDaoTest {
 
     private lateinit var database: HodlDatabase
 
+    fun Bot(): HodlBot {
+        return HodlBot(
+            id = "id1",
+            type = BotType.KNIFE_CATCH,
+            ticker = "BTC",
+            currency = "KRW",
+            low = BigDecimal(100),
+            high = BigDecimal(100),
+            girdCount = 10,
+            status = BotStatus.CREATED
+        )
+    }
+
     @Before
     fun initDb() {
         database = Room.inMemoryDatabaseBuilder(
@@ -28,16 +41,7 @@ class HodlBotDaoTest {
     @Test
     fun insertBotAndGetBot() = runTest {
 
-        val bot = HodlBot(
-            id = "id1",
-            type = BotType.KNIFE_CATCH,
-            ticker = "BTC",
-            currency = "KRW",
-            low = BigDecimal(100),
-            high = BigDecimal(100),
-            girdCount = 10,
-            status = BotStatus.CREATED
-        )
+        val bot = Bot()
 
         database.hodlBotDao().upsert(bot)
 
@@ -50,27 +54,8 @@ class HodlBotDaoTest {
     @Test
     fun insertMultipleBotAndGetBot() = runTest {
 
-        val bot1 = HodlBot(
-            id = "id1",
-            type = BotType.KNIFE_CATCH,
-            ticker = "BTC",
-            currency = "KRW",
-            low = BigDecimal(100),
-            high = BigDecimal(100),
-            girdCount = 10,
-            status = BotStatus.CREATED
-        )
-
-        val bot2 = HodlBot(
-            id = "id2",
-            type = BotType.KNIFE_CATCH,
-            ticker = "BTC",
-            currency = "KRW",
-            low = BigDecimal(100),
-            high = BigDecimal(100),
-            girdCount = 10,
-            status = BotStatus.CREATED
-        )
+        val bot1 = Bot()
+        val bot2 = bot1.copy(id = "id2")
 
         database.hodlBotDao().upsert(bot1)
         database.hodlBotDao().upsert(bot2)
@@ -82,33 +67,14 @@ class HodlBotDaoTest {
     @Test
     fun upsertAllAndGetBot() = runTest {
 
-        val bot1 = HodlBot(
-            id = "id1",
-            type = BotType.KNIFE_CATCH,
-            ticker = "BTC",
-            currency = "KRW",
-            low = BigDecimal(100),
-            high = BigDecimal(100),
-            girdCount = 10,
-            status = BotStatus.CREATED
-        )
+        val bot = Bot()
+        val botList = listOf(bot, bot.copy(id = "bot2"))
 
-        val bot2 = HodlBot(
-            id = "id2",
-            type = BotType.KNIFE_CATCH,
-            ticker = "BTC",
-            currency = "KRW",
-            low = BigDecimal(100),
-            high = BigDecimal(100),
-            girdCount = 10,
-            status = BotStatus.CREATED
-        )
+        database.hodlBotDao().upsertAll(botList)
 
-        database.hodlBotDao().upsert(bot1)
-        database.hodlBotDao().upsert(bot2)
         val bots = database.hodlBotDao().observeAll().first()
         assertEquals(2, bots.size)
-        assertEquals(listOf(bot1,bot2), bots)
+        assertEquals(botList, bots)
 
 
         database.hodlBotDao().upsertAll(bots)

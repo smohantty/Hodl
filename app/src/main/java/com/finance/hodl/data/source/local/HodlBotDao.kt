@@ -11,6 +11,9 @@ interface HodlBotDao {
     @Query("SELECT * FROM bot")
     fun observeAll(): Flow<List<HodlBot>>
 
+    @Query("SELECT * FROM bot where status = :botStatus")
+    fun observeAllWithStatus(botStatus: BotStatus): Flow<List<HodlBot>>
+
     @Upsert
     suspend fun upsert(bot: HodlBot)
 
