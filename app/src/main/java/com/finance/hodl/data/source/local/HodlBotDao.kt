@@ -18,7 +18,7 @@ interface HodlBotDao {
     suspend fun upsertAll(bots: List<HodlBot>)
 
     @Query("UPDATE bot SET status = :botStatus WHERE id = :botId")
-    suspend fun updateStatus(botId: Int, botStatus: BotStatus)
+    suspend fun updateStatus(botId: String, botStatus: BotStatus)
 
     @Query("DELETE FROM bot")
     suspend fun deleteAll()

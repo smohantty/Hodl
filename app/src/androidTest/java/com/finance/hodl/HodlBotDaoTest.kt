@@ -28,7 +28,10 @@ class HodlBotDaoTest {
     fun insertBotAndGetBot() = runTest {
 
         val bot = HodlBot(
+            id = "id1",
             type = BotType.KNIFE_CATCH,
+            ticker = "BTC",
+            currency = "KRW",
             status = BotStatus.RUNNING
         )
 
@@ -37,20 +40,25 @@ class HodlBotDaoTest {
         val bots = database.hodlBotDao().observeAll().first()
 
         assertEquals(1, bots.size)
-        assertEquals(bot.type, bots[0].type)
-        assertEquals(bot.status, bots[0].status)
+        assertEquals(bot, bots[0])
     }
 
     @Test
     fun insertMultipleBotAndGetBot() = runTest {
 
         val bot1 = HodlBot(
+            id = "id1",
             type = BotType.KNIFE_CATCH,
+            ticker = "BTC",
+            currency = "KRW",
             status = BotStatus.RUNNING
         )
 
         val bot2 = HodlBot(
+            id = "id2",
             type = BotType.KNIFE_CATCH,
+            ticker = "BTC",
+            currency = "KRW",
             status = BotStatus.RUNNING
         )
 
@@ -65,12 +73,18 @@ class HodlBotDaoTest {
     fun upsertAllAndGetBot() = runTest {
 
         val bot1 = HodlBot(
+            id = "id1",
             type = BotType.KNIFE_CATCH,
+            ticker = "BTC",
+            currency = "KRW",
             status = BotStatus.RUNNING
         )
 
         val bot2 = HodlBot(
+            id = "id2",
             type = BotType.KNIFE_CATCH,
+            ticker = "BTC",
+            currency = "KRW",
             status = BotStatus.RUNNING
         )
 
@@ -78,6 +92,8 @@ class HodlBotDaoTest {
         database.hodlBotDao().upsert(bot2)
         val bots = database.hodlBotDao().observeAll().first()
         assertEquals(2, bots.size)
+        assertEquals(listOf(bot1,bot2), bots)
+
 
         database.hodlBotDao().upsertAll(bots)
         val allBots = database.hodlBotDao().observeAll().first()
