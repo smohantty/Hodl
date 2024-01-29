@@ -3,6 +3,7 @@ package com.finance.hodl.exchange.bithumb
 import com.finance.hodl.exchange.bithumb.response.BithumbAllTickerResponse
 import com.finance.hodl.exchange.bithumb.response.BithumbOrderBookResponse
 import com.finance.hodl.exchange.bithumb.response.BithumbSingleTickerResponse
+import com.finance.hodl.exchange.bithumb.response.RecentTransactionsResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -14,6 +15,13 @@ interface BithumbPublicApiService {
         @retrofit2.http.Path("crypto") crypto: String,
         @retrofit2.http.Path("currency") currency: String
     ): BithumbSingleTickerResponse
+
+    @GET("public/transaction_history/{crypto}_{currency}")
+    suspend fun getRecentTransactionsForTicker(
+        @retrofit2.http.Path("crypto") crypto: String,
+        @retrofit2.http.Path("currency") currency: String
+    ): RecentTransactionsResponse
+
 
     @GET("public/orderbook/{crypto}_{currency}")
     suspend fun getOrderBook(

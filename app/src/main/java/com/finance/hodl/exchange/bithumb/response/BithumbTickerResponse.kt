@@ -33,6 +33,19 @@ data class BithumbSingleTickerData(
     val date:BigInteger
 )
 
+data class RecentTransactionsResponse(
+    val status: String,
+    val data: List<Transaction>
+)
+
+data class Transaction(
+    val transaction_date: String,
+    val type: String,
+    val units_traded: Double,
+    val price: Long,
+    val total: Long
+)
+
 @Serializable
 data class BithumbAllTickerResponse(
     val status: String,

@@ -37,6 +37,17 @@ suspend fun testRetroApi()
     }
 }
 
+suspend fun testLastTradedPriceApi()
+{
+    val apiService = BithumbPublicApiService.create()
+    try {
+        val obj = apiService.getRecentTransactionsForTicker("BTC", "KRW")
+        Log.d("SUV", "Last Btc traded price  : ${obj.data[0].price}")
+    } catch (e: Exception) {
+        Log.d("SUV","Exception: ${e.message}")
+    }
+}
+
 fun testHttpApi()
 {
     val client = OkHttpClient()
@@ -74,6 +85,7 @@ class HodlApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         GlobalScope.launch {
+            testLastTradedPriceApi()
             testRetroApi()
             //testHttpApi()
         }
