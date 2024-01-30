@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -26,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.finance.hodl.ui.screens.BottomNavigationItem
+import com.finance.hodl.ui.screens.HodlHomeScreen
 import com.finance.hodl.ui.theme.HodlTheme
 import kotlinx.serialization.Serializable
 
@@ -40,9 +46,31 @@ class HodlMainActivity : ComponentActivity() {
             HodlTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    RangeInputFields() { low , high , range ->
-                        Log.d("SUV", "low $low , high: $high, range : $range ")
-                    }
+                    val items = listOf(
+                        BottomNavigationItem(
+                            title = "Home",
+                            selectedIcon = Icons.Filled.Home,
+                            unselectedIcon = Icons.Default.Home,
+                            hasNews = false
+                        ),
+                        BottomNavigationItem(
+                            title = "Bot",
+                            selectedIcon = Icons.Filled.Face,
+                            unselectedIcon = Icons.Default.Face,
+                            hasNews = true,
+                            badgeCount = 5
+                        ),
+                        BottomNavigationItem(
+                            title = "Settings",
+                            selectedIcon = Icons.Filled.Settings,
+                            unselectedIcon = Icons.Default.Settings,
+                            hasNews = true
+                        )
+                    )
+                    HodlHomeScreen(items)
+//                    RangeInputFields() { low , high , range ->
+//                        Log.d("SUV", "low $low , high: $high, range : $range ")
+//                    }
                 }
             }
         }
