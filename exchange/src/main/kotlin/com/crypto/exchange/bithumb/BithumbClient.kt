@@ -5,7 +5,7 @@ import com.crypto.exchange.bithumb.private.trade.TradeApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class BithumbClient(
+internal class BithumbClient(
     private val publicApiService: PublicApiService,
     private val accountApiService: AccountApiService,
     private val tradeApiService: TradeApiService,

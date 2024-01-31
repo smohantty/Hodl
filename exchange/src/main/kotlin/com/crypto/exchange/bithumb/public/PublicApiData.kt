@@ -3,12 +3,12 @@ package com.crypto.exchange.bithumb.public
 import java.math.BigDecimal
 import java.math.BigInteger
 
-data class SingleTicker(
+internal data class SingleTicker(
     val status: String,
     val data: SingleTickerData
 )
 
-data class SingleTickerData(
+internal data class SingleTickerData(
     val opening_price: BigDecimal,
     val closing_price: BigDecimal,
     val min_price: BigDecimal,
@@ -23,12 +23,12 @@ data class SingleTickerData(
     val date: BigInteger
 )
 
-data class RecentTransactions(
+internal data class RecentTransactions(
     val status: String,
     val data: List<Transaction>
 )
 
-data class Transaction(
+internal data class Transaction(
     val transaction_date: String,
     val type: String,
     val units_traded: Double,
@@ -36,14 +36,14 @@ data class Transaction(
     val total: Long
 )
 
-data class AllTicker(
+internal data class AllTicker(
     val status: String,
     val data: Map<String, AllTickerData>,
     val date: String,
 )
 
 
-data class AllTickerData(
+internal data class AllTickerData(
     val opening_price: String,
     val closing_price: String,
     val min_price: String,
@@ -58,13 +58,13 @@ data class AllTickerData(
 )
 
 
-data class OrderBook(
+internal data class OrderBook(
     val status: String,
     val data: OrderBookData
 )
 
 
-data class OrderBookData(
+internal data class OrderBookData(
     val timestamp: BigInteger,
     val payment_currency: String,
     val order_currency: String,
@@ -73,7 +73,7 @@ data class OrderBookData(
 )
 
 
-data class Order(
+internal data class Order(
     val price: BigDecimal,
     val quantity: BigDecimal
 )

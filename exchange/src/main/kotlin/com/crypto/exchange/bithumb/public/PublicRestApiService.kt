@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
-interface PublicApiService {
+internal interface PublicApiService {
 
     @GET("public/ticker/{crypto}_{currency}")
     suspend fun getTicker(

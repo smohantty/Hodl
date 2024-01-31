@@ -17,9 +17,9 @@ class CryptoExchange private constructor(private val builder: Builder) {
     }
 
     class Builder {
-        var exchange: Exchange = Exchange.Mock
-        var apiKey: String = String()
-        var privateKey: String = String()
+        internal var exchange: Exchange = Exchange.Mock
+        internal var apiKey: String = String()
+        internal var privateKey: String = String()
 
         fun apiKey(value: String) = apply { this.apiKey = value }
         fun privateKey(value: String) = apply { this.privateKey = value }
