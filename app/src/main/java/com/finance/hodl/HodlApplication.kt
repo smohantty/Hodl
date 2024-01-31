@@ -3,27 +3,10 @@ package com.finance.hodl
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Build
-import android.os.IBinder
-import android.util.Log
-import com.finance.hodl.exchange.bithumb.BithumbPublicApiService
-import com.finance.hodl.exchange.bithumb.response.BithumbAllTickerResponse
-import com.finance.hodl.exchange.bithumb.response.BithumbSingleTickerResponse
-import com.finance.hodl.services.HodlService
 import com.finance.hodl.services.HodleServiceHandle
-import com.google.gson.Gson
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.io.IOException
 
 
 //suspend fun testRetroApi()

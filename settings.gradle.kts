@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Hodl"
 include(":app")
+include(":exchange")
