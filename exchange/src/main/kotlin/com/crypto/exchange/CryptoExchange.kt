@@ -1,19 +1,16 @@
 package com.crypto.exchange
 
-enum class Exchange() {
-    Bithumb,
-    Binance,
-    Mock
+sealed class Exchange(val name: String) {
+    object Bithumb : Exchange("Bithumb")
+    object Binance : Exchange("Binance")
+    object Mock : Exchange("Mock")
 }
+
 class CryptoExchange private constructor(private val builder: Builder) {
 
     // Test Api
     fun name():String {
-        return when(builder.exchange) {
-            Exchange.Bithumb -> "Bithumb"
-            Exchange.Binance -> "Binance"
-            Exchange.Mock -> "Mock"
-        }
+        return builder.exchange.name
     }
 
     class Builder {
