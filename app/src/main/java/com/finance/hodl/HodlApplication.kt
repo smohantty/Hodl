@@ -26,89 +26,65 @@ import okhttp3.Request
 import java.io.IOException
 
 
-suspend fun testRetroApi()
-{
-    val apiService = BithumbPublicApiService.create()
-    try {
-        val obj = apiService.getTicker("BTC", "KRW")
-        Log.d("SUV", "Retro response object : $obj")
-    } catch (e: Exception) {
-        Log.d("SUV","Exception: ${e.message}")
-    }
-}
+//suspend fun testRetroApi()
+//{
+//    val apiService = BithumbPublicApiService.create()
+//    try {
+//        val obj = apiService.getTicker("BTC", "KRW")
+//        Log.d("SUV", "Retro response object : $obj")
+//    } catch (e: Exception) {
+//        Log.d("SUV","Exception: ${e.message}")
+//    }
+//}
+//
+//suspend fun testLastTradedPriceApi()
+//{
+//    val apiService = BithumbPublicApiService.create()
+//    try {
+//        val obj = apiService.getRecentTransactionsForTicker("BTC", "KRW")
+//        Log.d("SUV", "Last Btc traded price  : ${obj.data[0].price}")
+//    } catch (e: Exception) {
+//        Log.d("SUV","Exception: ${e.message}")
+//    }
+//}
 
-suspend fun testLastTradedPriceApi()
-{
-    val apiService = BithumbPublicApiService.create()
-    try {
-        val obj = apiService.getRecentTransactionsForTicker("BTC", "KRW")
-        Log.d("SUV", "Last Btc traded price  : ${obj.data[0].price}")
-    } catch (e: Exception) {
-        Log.d("SUV","Exception: ${e.message}")
-    }
-}
-
-fun testHttpApi()
-{
-    val client = OkHttpClient()
-
-    val request = Request.Builder()
-        .url("https://api.bithumb.com/public/orderbook/BTC_KRW")
-        .get()
-        .addHeader("accept", "application/json")
-        .build()
-    try {
-        // Execute the request
-        val response = client.newCall(request).execute()
-
-        if (response.isSuccessful) {
-            // Parse JSON response using Gson
-            val gson = Gson()
-            val responseBodyString = response.body()?.string()
-
-            Log.d("SUV", "json String : $responseBodyString")
-
-            //val tickerResponse = gson.fromJson(responseBodyString, BithumbSingleTickerResponse::class.java)
-            //Log.d("SUV", "data obj : $tickerResponse")
-            // Add more fields as needed
-
-        } else {
-            Log.d("SUV","Error: ${response.code()} ${response.message()}")
-        }
-    } catch (e: IOException) {
-        Log.d("SUV","Exception: ${e.message}")
-    }
-}
+//fun testHttpApi()
+//{
+//    val client = OkHttpClient()
+//
+//    val request = Request.Builder()
+//        .url("https://api.bithumb.com/public/orderbook/BTC_KRW")
+//        .get()
+//        .addHeader("accept", "application/json")
+//        .build()
+//    try {
+//        // Execute the request
+//        val response = client.newCall(request).execute()
+//
+//        if (response.isSuccessful) {
+//            // Parse JSON response using Gson
+//            val gson = Gson()
+//            val responseBodyString = response.body()?.string()
+//
+//            Log.d("SUV", "json String : $responseBodyString")
+//
+//            //val tickerResponse = gson.fromJson(responseBodyString, BithumbSingleTickerResponse::class.java)
+//            //Log.d("SUV", "data obj : $tickerResponse")
+//            // Add more fields as needed
+//
+//        } else {
+//            Log.d("SUV","Error: ${response.code()} ${response.message()}")
+//        }
+//    } catch (e: IOException) {
+//        Log.d("SUV","Exception: ${e.message}")
+//    }
+//}
 @HiltAndroidApp
 class HodlApplication : Application() {
     private lateinit var serviceHandle: HodleServiceHandle
     override fun onCreate() {
         super.onCreate()
-        GlobalScope.launch {
-            testLastTradedPriceApi()
-            testRetroApi()
-            //testHttpApi()
-        }
-
-//        createNotificationChannel(this,"HodlChannelId", "Hodl Notification", "Hodl Service")
-//        val hodlServiceIntent = Intent(this, HodlService::class.java)
-//        startService(hodlServiceIntent)
-//
-//        serviceHandle = HodleServiceHandle(this)
-//
-//        GlobalScope.launch {
-//            serviceHandle.connect()
-//
-//            val apiService = BithumbPublicApiService.create()
-//            while(true) {
-//
-//                val response = apiService.getTicker("BTC","KRW")
-//                Log.d("SUV", "RETRO response = $response")
-//                delay(5000)
-//            }
-//        }
     }
-
     private fun createNotificationChannel(context: Context, channelId: String, channelName: String, channelDescription: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_DEFAULT

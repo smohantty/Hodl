@@ -1,4 +1,4 @@
-package com.finance.hodl.ui.theme
+package com.finance.hodl.view.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

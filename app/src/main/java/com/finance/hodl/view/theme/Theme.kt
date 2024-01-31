@@ -1,4 +1,4 @@
-package com.finance.hodl.ui.theme
+package com.finance.hodl.view.theme
 
 import android.app.Activity
 import android.os.Build
