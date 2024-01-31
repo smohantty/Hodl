@@ -6,6 +6,7 @@ sealed class Exchange(val name: String) {
     object Mock : Exchange("Mock")
 }
 
+
 class CryptoExchange private constructor(private val builder: Builder) {
 
     // Test Api
