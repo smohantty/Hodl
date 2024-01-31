@@ -11,7 +11,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.finance.hodl.R
 import com.finance.hodl.activities.HodlMainActivity
-import com.finance.hodl.exchange.bithumb.BithumbPublicApiService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -51,16 +50,6 @@ class HodlService : Service() {
     }
 
     private fun runService() {
-        var timer:Int = 1
-       GlobalScope.launch(Dispatchers.IO) {
-           val apiService = BithumbPublicApiService.create()
-           while (true) {
-               val response = apiService.getTicker("BTC", "KRW")
-               Log.d("SUV", "response : $response")
-               delay(5000)
-               timer +=1
-           }
-       }
     }
 
     public fun pubFunction(str: String) {

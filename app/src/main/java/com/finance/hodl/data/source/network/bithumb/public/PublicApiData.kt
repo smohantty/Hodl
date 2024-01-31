@@ -1,8 +1,6 @@
 @file:UseSerializers(BigDecimalAsPlainStringSerializer::class, BigIntegerAsPlainStringSerializer::class)
 package com.finance.hodl.data.source.network.bithumb.public
 
-import com.finance.hodl.exchange.bithumb.response.Order
-import com.finance.hodl.exchange.bithumb.response.OrderBookData
 import com.finance.hodl.lib.BigDecimalAsPlainStringSerializer
 import com.finance.hodl.lib.BigIntegerAsPlainStringSerializer
 import kotlinx.serialization.Serializable
