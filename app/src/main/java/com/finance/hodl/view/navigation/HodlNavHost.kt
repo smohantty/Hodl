@@ -7,18 +7,20 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.finance.hodl.view.HodlAppState
 import com.finance.hodl.view.screens.HodlBotsNewScreen
 import com.finance.hodl.view.screens.HodlHomeBithumbScreen
 import com.finance.hodl.view.screens.HodlSettingsMainScreen
 
 @Composable
 fun HodlNavHost(
-    navController: NavHostController,
-    route: String
+    appState: HodlAppState,
+    startDestination: String = HodlNavGraph.Home.route,
 ) {
+    val navController = appState.navController
     NavHost(
         navController = navController,
-        startDestination = route,
+        startDestination = startDestination,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None }
     ) {

@@ -1,123 +1,142 @@
 package com.finance.hodl.view
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.compose.rememberNavController
-import com.finance.hodl.view.navigation.HodlNavGraph
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
+import com.finance.hodl.view.component.HodlBackground
+import com.finance.hodl.view.component.HodlGradientBackground
+import com.finance.hodl.view.component.HodlNavigationBar
+import com.finance.hodl.view.component.HodlNavigationBarItem
 import com.finance.hodl.view.navigation.HodlNavHost
+import com.finance.hodl.view.navigation.HodlTopLevelDestination
+import com.finance.hodl.view.theme.LocalGradientColors
 
 
 @Composable
-fun HodlApp() {
-    val coroutineScope = rememberCoroutineScope()
-    val navController = rememberNavController()
-    val selectedItemIndex = rememberSaveable {
-        mutableIntStateOf(0)
-    }
-    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-        Scaffold(
-            bottomBar = {
-                NavigationBar {
-                    navbarList.forEachIndexed { index, item ->
-                        NavigationBarItem(
-                            selected = selectedItemIndex.intValue == index,
-                            onClick = {
-                                selectedItemIndex.intValue = index
-                                navController.navigate(item.destination.route)
-                            },
-                            label = {
-                                Text(text = item.title)
-                            },
-                            alwaysShowLabel = false,
-                            icon = {
-                                BadgedBox(
-                                    badge = {
-                                        if (item.badgeCount != null) {
-                                            Badge {
-                                                Text(text = item.badgeCount.toString())
-                                            }
-                                        } else if (item.hasNews) {
-                                            Badge()
-                                        }
-                                    }
-                                ) {
-                                    Icon(
-                                        imageVector = if (index == selectedItemIndex.intValue) {
-                                            item.selectedIcon
-                                        } else item.unselectedIcon,
-                                        contentDescription = item.title
-                                    )
-                                }
-                            }
-                        )
+fun HodlApp(
+    appState: HodlAppState = rememberHodlAppState()
+) {
+
+    HodlBackground {
+        HodlGradientBackground(
+            gradientColors = LocalGradientColors.current
+        ) {
+            Scaffold(
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onBackground,
+                //contentWindowInsets = WindowInsets(0, 0, 0, 0), ??
+                bottomBar = {
+                    HodlBottomBar(
+                        destinations = appState.topLevelDestinations,
+                        destinationsWithUnreadResources = setOf(),
+                        onNavigateToDestination = appState::navigateToTopLevelDestination,
+                        currentDestination = appState.currentDestination,
+                        modifier = Modifier.testTag("NiaBottomBar"),
+                    )
+                }
+            ) {
+                Row(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(top = it.calculateTopPadding())
+                        .consumeWindowInsets(it)
+                        .windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(
+                                WindowInsetsSides.Horizontal,
+                            ),
+                        ),
+                ) {
+                    Column(Modifier.fillMaxSize()) {
+                        HodlNavHost(appState = appState)
                     }
                 }
-            }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = it.calculateTopPadding())
-            ) {
-                HodlNavHost(navController, HodlNavGraph.Home.route)
             }
         }
     }
 }
 
-data class BottomNavigationItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val hasNews: Boolean,
-    val badgeCount:Int? = null,
-    val destination:HodlNavGraph
-)
 
-val navbarList = listOf(
-    BottomNavigationItem(
-        title = "Home",
-        selectedIcon = Icons.Filled.Home,
-        unselectedIcon = Icons.Default.Home,
-        hasNews = false,
-        destination = HodlNavGraph.Home
-    ),
-    BottomNavigationItem(
-        title = "Bot",
-        selectedIcon = Icons.Filled.Face,
-        unselectedIcon = Icons.Default.Face,
-        hasNews = true,
-        badgeCount = 5,
-        destination = HodlNavGraph.Bots
-    ),
-    BottomNavigationItem(
-        title = "Settings",
-        selectedIcon = Icons.Filled.Settings,
-        unselectedIcon = Icons.Default.Settings,
-        hasNews = true,
-        destination = HodlNavGraph.Settings
-    )
-)
+@Composable
+private fun HodlBottomBar(
+    destinations: List<HodlTopLevelDestination>,
+    destinationsWithUnreadResources: Set<HodlTopLevelDestination>,
+    onNavigateToDestination: (HodlTopLevelDestination) -> Unit,
+    currentDestination: NavDestination?,
+    modifier: Modifier = Modifier,
+) {
+    HodlNavigationBar(
+        modifier = modifier,
+    ) {
+        destinations.forEach { destination ->
+            val hasUnread = destinationsWithUnreadResources.contains(destination)
+            val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
+            HodlNavigationBarItem(
+                selected = selected,
+                onClick = { onNavigateToDestination(destination) },
+                icon = {
+                    Icon(
+                        imageVector = destination.unselectedIcon,
+                        contentDescription = null,
+                    )
+                },
+                selectedIcon = {
+                    Icon(
+                        imageVector = destination.selectedIcon,
+                        contentDescription = null,
+                    )
+                },
+                label = { Text(stringResource(destination.iconTextId)) },
+                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
+            )
+        }
+    }
+}
+
+private fun Modifier.notificationDot(): Modifier =
+    composed {
+        val tertiaryColor = MaterialTheme.colorScheme.tertiary
+        drawWithContent {
+            drawContent()
+            drawCircle(
+                tertiaryColor,
+                radius = 5.dp.toPx(),
+                // This is based on the dimensions of the NavigationBar's "indicator pill";
+                // however, its parameters are private, so we must depend on them implicitly
+                // (NavigationBarTokens.ActiveIndicatorWidth = 64.dp)
+                center = center + Offset(
+                    64.dp.toPx() * .45f,
+                    32.dp.toPx() * -.45f - 6.dp.toPx(),
+                ),
+            )
+        }
+    }
+
+private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: HodlTopLevelDestination) =
+    this?.hierarchy?.any {
+        it.route?.contains(destination.name, true) ?: false
+    } ?: false
 
 
 
