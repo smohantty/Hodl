@@ -5,14 +5,15 @@ import kotlinx.serialization.json.Json
 import java.math.BigDecimal
 import java.math.BigInteger
 
+
 @Serializable
-internal data class SingleTicker(
+internal data class NetworkResponse<T>(
     val status: String,
-    val data: SingleTickerData
+    val data: T,
 )
 
 @Serializable
-internal data class SingleTickerData(
+internal data class SingleTicker(
     val opening_price: String,
     val closing_price: String,
     val min_price: String,
@@ -25,12 +26,6 @@ internal data class SingleTickerData(
     val fluctate_24H: String,
     val fluctate_rate_24H: String,
     val date: String,
-)
-
-@Serializable
-internal data class RecentTransactions(
-    val status: String,
-    val data: List<Transaction>
 )
 
 internal fun List<Transaction>.averagePrice(): BigDecimal {
@@ -49,14 +44,9 @@ internal data class Transaction(
     val price: Long,
     val total: Long
 )
-@Serializable
-internal data class AllTicker(
-    val status: String,
-    val data: AllTickerData,
-)
 
 @Serializable
-internal data class AllTickerData(
+internal data class AllTicker(
     val tickers: Map<String, TickerData>,
     val date: String,
 )
@@ -76,14 +66,7 @@ internal data class TickerData(
     val fluctate_rate_24H: String
 )
 
-
 internal data class OrderBook(
-    val status: String,
-    val data: OrderBookData
-)
-
-
-internal data class OrderBookData(
     val timestamp: BigInteger,
     val payment_currency: String,
     val order_currency: String,
