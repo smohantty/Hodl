@@ -13,6 +13,22 @@ internal data class NetworkResponse<T>(
 )
 
 @Serializable
+data class AccountInfo(
+    val created: Long,
+    val account_id: String,
+    val order_currency: String,
+    val payment_currency: String,
+    val trade_fee: String,
+    val balance: String
+)
+
+
+@Serializable
+internal data class BalanceInfo(
+    val status: String, //TODO
+)
+
+@Serializable
 internal data class SingleTicker(
     val opening_price: String,
     val closing_price: String,

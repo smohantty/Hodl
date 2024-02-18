@@ -12,4 +12,5 @@ dependencies {
     api(libs.core.ktx)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.bundles.network)
+    implementation("commons-codec:commons-codec:1.15")
 }
