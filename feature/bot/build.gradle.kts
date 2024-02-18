@@ -1,5 +1,6 @@
 plugins {
     id("hodl.android.feature")
+    id("hodl.android.library.compose")
 }
 
 android {

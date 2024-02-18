@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.finance.hodl.feature.bot.HodlBotsRout
 import com.finance.hodl.ui.HodlAppState
 
 @Composable
@@ -41,7 +42,7 @@ fun HodlNavHost(
             route = HodlNavGraph.Bots.route
         ) {
             composable(HodlBots.New.route) {
-                HodlBotsNewScreen(navController = navController)
+                HodlBotsRout(navController = navController)
             }
         }
 
@@ -53,20 +54,6 @@ fun HodlNavHost(
                 HodlSettingsMainScreen(navController = navController)
             }
         }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
-@Composable
-fun HodlBotsNewScreen(
-    navController: NavHostController
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Text(text = "Bots")
-        Text(text = navController.currentBackStackEntry?.destination?.route?: "" )
     }
 }
 
