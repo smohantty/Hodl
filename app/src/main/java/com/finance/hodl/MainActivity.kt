@@ -20,6 +20,7 @@ import com.finance.hodl.data.repository.ExchangeRepository
 import com.finance.hodl.designsystem.component.HodlBackground
 import com.finance.hodl.designsystem.theme.HodlTheme
 import com.finance.hodl.feature.bot.BotsViewModel
+import com.finance.hodl.ui.HodlApp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -30,14 +31,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            HodlTheme {
-                HodlBackground {
-                    Column {
-                        TestScreen()
-                        TestScreen("ETH")
-                    }
-
-                }
+            HodlTheme(
+                darkTheme = false,
+                androidTheme = true,
+                disableDynamicTheming = true,
+            ) {
+                HodlApp()
             }
         }
     }
