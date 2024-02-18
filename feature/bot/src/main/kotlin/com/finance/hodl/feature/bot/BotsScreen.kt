@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -33,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 
@@ -78,6 +81,18 @@ internal fun HodlBotsNewScreen(
         modifier = Modifier
             .fillMaxSize()
     ){
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = "Bitcoin",
+            style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center)
+        )
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = "BTC/KRW",
+            style = MaterialTheme.typography.bodySmall.copy(textAlign = TextAlign.Center),
+            color = Color.Gray
+        )
+        TrackPrice(priceStream = viewModel.observePrice("BTC", "KRW"))
         RangeInputFields(){a,b,c ->
         }
     }
@@ -114,17 +129,21 @@ internal fun HistoryScreen(
 internal fun TrackPrice(
     ticker: String = "BTC",
     currency: String = "KRW",
-    flow: Flow<BigDecimal>
+    priceStream: Flow<BigDecimal>
 ) {
     val price = remember { mutableStateOf<BigDecimal>(BigDecimal.ZERO) }
 
     LaunchedEffect(ticker, currency) {
-        flow.collect {
+        priceStream.collect {
             price.value = it
         }
     }
 
-    Text(text = "$ticker/$currency : ${price.value}")
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = "${price.value}",
+         style = MaterialTheme.typography.titleMedium.copy(textAlign = TextAlign.Center)
+    )
 }
 
 

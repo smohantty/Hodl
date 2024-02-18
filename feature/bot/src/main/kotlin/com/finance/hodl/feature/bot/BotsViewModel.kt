@@ -24,7 +24,7 @@ class BotsViewModel @Inject constructor(
     fun observePrice(ticker: String, currency:String): Flow<BigDecimal> = flow {
         while (true) {
             emit(exchange.getPrice(ticker, currency))
-            delay(10000)
+            delay(1000)
         }
     }
 }
