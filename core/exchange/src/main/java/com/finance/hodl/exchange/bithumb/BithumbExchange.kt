@@ -1,22 +1,16 @@
 package com.finance.hodl.exchange.bithumb
 
 import com.finance.hodl.exchange.ExchangeClient
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import okhttp3.Call
-import okhttp3.MediaType.Companion.toMediaType
-import retrofit2.Retrofit
-import src.main.com.finance.hodl.model.data.LimitOrder
-import src.main.com.finance.hodl.model.data.OrderInfo
-import src.main.com.finance.hodl.model.data.OrderType
+import com.finance.hodl.model.data.LimitOrder
+import com.finance.hodl.model.data.OrderId
 import java.math.BigDecimal
 import javax.inject.Inject
 
 
 internal class BithumbExchange @Inject constructor(
     private val publicRestApi: PublicApiService,
-    private val tradeApi: BithumbTradeApiService,
+    private val tradeApi: PrivateTradeApiService,
+    private val accountApi: PrivateAccountApiService,
 ) : ExchangeClient {
 
     override fun name():String = "Real Bithumb Exchange"
@@ -29,7 +23,7 @@ internal class BithumbExchange @Inject constructor(
         return publicRestApi.getAllTicker(currency).data.tickers.keys.toList()
     }
 
-    override suspend fun placeLimitOrder(order: LimitOrder): OrderInfo {
-        return OrderInfo(OrderType.BUY, "", "", BigDecimal(0), BigDecimal(0))
+    override suspend fun placeLimitOrder(order: LimitOrder): Result<OrderId> {
+        return Result.failure(Exception("Not implemented"))
     }
 }

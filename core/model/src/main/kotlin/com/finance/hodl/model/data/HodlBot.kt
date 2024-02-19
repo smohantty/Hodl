@@ -1,4 +1,4 @@
-package src.main.com.finance.hodl.model.data
+package com.finance.hodl.model.data
 
 import java.math.BigDecimal
 

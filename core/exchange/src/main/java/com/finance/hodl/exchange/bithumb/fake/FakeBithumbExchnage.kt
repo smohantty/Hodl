@@ -3,19 +3,12 @@ package com.finance.hodl.exchange.bithumb.fake
 
 import android.util.Log
 import com.finance.hodl.exchange.ExchangeClient
-import com.finance.hodl.exchange.bithumb.BithumbTradeApiService
+import com.finance.hodl.exchange.bithumb.PrivateAccountApiService
+import com.finance.hodl.exchange.bithumb.PrivateTradeApiService
 import com.finance.hodl.exchange.bithumb.PublicApiService
-import com.finance.hodl.exchange.bithumb.TradeRequest
-import com.finance.hodl.exchange.bithumb.averagePrice
 import com.finance.hodl.exchange.bithumb.getApiHeaders
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import okhttp3.Call
-import okhttp3.MediaType.Companion.toMediaType
-import retrofit2.Retrofit
-import src.main.com.finance.hodl.model.data.LimitOrder
-import src.main.com.finance.hodl.model.data.OrderInfo
+import com.finance.hodl.model.data.LimitOrder
+import com.finance.hodl.model.data.OrderId
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -24,7 +17,8 @@ import javax.inject.Inject
  */
 internal class FakeBithumbExchange @Inject constructor(
     private val publicRestApi: PublicApiService,
-    private val tradeApi: BithumbTradeApiService,
+    private val tradeApi: PrivateTradeApiService,
+    private val accountApi: PrivateAccountApiService,
 ) : ExchangeClient {
     override fun name():String = "Fake Bithumb Exchange"
 
@@ -36,35 +30,26 @@ internal class FakeBithumbExchange @Inject constructor(
         return publicRestApi.getAllTicker(currency).data.tickers.keys.toList()
     }
 
-    override suspend fun placeLimitOrder(order: LimitOrder): OrderInfo {
-        return placeLimitOrderHelper(order)
-    }
-
-    private suspend fun placeLimitOrderHelper(order: LimitOrder): OrderInfo {
-        val request = TradeRequest(
-            order_currency = order.ticker,
-            payment_currency = order.paymentCurrency,
-            units = order.paymentAmount.toFloat(),
-            price = order.limitPrice.toInt(),
-            type = order.type.toString()
-        )
-
-        val params = mapOf("order_currency" to request.order_currency,
-            "payment_currency" to request.payment_currency,
-            "units" to request.units.toString(),
-            "price" to request.price.toString(),
-            "type" to request.type,
+    override suspend fun placeLimitOrder(order: LimitOrder): Result<OrderId> {
+        val params = mapOf("order_currency" to order.ticker,
+            "payment_currency" to order.paymentCurrency,
+            "units" to order.paymentAmount.toString(),
+            "price" to order.limitPrice.toLong().toString(),
+            "type" to order.type.name,
         )
         val headers = getApiHeaders("/trade/place", params, "your_api_key", "your_api_secret")
-
-        val response = tradeApi.placeTrade(
-            tradeRequestParams = headers["params"]!!,
-            apiKey = headers["Api-Key"]!!,
-            apiSign = headers["Api-Sign"]!!,
-            apiNonce = headers["Api-Nonce"]!!,
-        )
-        Log.d("SUV", "Response = $response")
-
-        return OrderInfo(order.type, order.ticker, order.paymentCurrency, order.paymentAmount, order.limitPrice)
+        return try {
+            val response = tradeApi.placeTrade(
+                tradeRequestParams = headers["params"]!!,
+                apiKey = headers["Api-Key"]!!,
+                apiSign = headers["Api-Sign"]!!,
+                apiNonce = headers["Api-Nonce"]!!,
+            )
+            Log.d("SUV", "Response = $response")
+            Result.success(OrderId(response.order_id))
+        } catch (e:Exception) {
+            Result.failure(e)
+        }
     }
+
 }

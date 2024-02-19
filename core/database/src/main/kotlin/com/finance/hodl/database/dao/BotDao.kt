@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.finance.hodl.database.model.BotEntity
+import com.finance.hodl.model.data.BotStatus
 import kotlinx.coroutines.flow.Flow
-import src.main.com.finance.hodl.model.data.BotStatus
 
 @Dao
 interface BotDao {

@@ -1,8 +1,8 @@
 package com.finance.hodl.data.repository
 
 import com.finance.hodl.exchange.ExchangeClient
-import src.main.com.finance.hodl.model.data.LimitOrder
-import src.main.com.finance.hodl.model.data.OrderInfo
+import com.finance.hodl.model.data.LimitOrder
+import com.finance.hodl.model.data.OrderId
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ class ExchangeRepository @Inject constructor(
         return exchange.getPrice(ticker, currency)
     }
 
-    suspend fun placeLimitOrder(order: LimitOrder): OrderInfo {
+    suspend fun placeLimitOrder(order: LimitOrder): Result<OrderId> {
         return exchange.placeLimitOrder(order);
     }
 }

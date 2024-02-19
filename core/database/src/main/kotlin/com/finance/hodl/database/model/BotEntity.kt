@@ -2,9 +2,9 @@ package com.finance.hodl.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import src.main.com.finance.hodl.model.data.BotStatus
-import src.main.com.finance.hodl.model.data.BotType
-import src.main.com.finance.hodl.model.data.HodlBot
+import com.finance.hodl.model.data.BotStatus
+import com.finance.hodl.model.data.BotType
+import com.finance.hodl.model.data.HodlBot
 import java.math.BigDecimal
 import java.math.BigInteger
 

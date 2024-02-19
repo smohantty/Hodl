@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.finance.hodl.mcf"
+    namespace = "com.finance.hodl.exchange"
 }
 
 dependencies {

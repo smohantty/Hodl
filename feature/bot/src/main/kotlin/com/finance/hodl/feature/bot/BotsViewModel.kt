@@ -3,18 +3,14 @@ package com.finance.hodl.feature.bot
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.finance.hodl.data.repository.ExchangeRepository
 import com.finance.hodl.domain.BotsUseCase
+import com.finance.hodl.model.data.LimitOrder
+import com.finance.hodl.model.data.OrderType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
-import src.main.com.finance.hodl.model.data.LimitOrder
-import src.main.com.finance.hodl.model.data.OrderType
 import java.math.BigDecimal
 import javax.inject.Inject
 

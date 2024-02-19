@@ -1,8 +1,8 @@
 package com.finance.hodl.exchange.di
 
-import com.finance.hodl.exchange.bithumb.BithumbTradeApiService
+import com.finance.hodl.exchange.bithumb.PrivateAccountApiService
+import com.finance.hodl.exchange.bithumb.PrivateTradeApiService
 import com.finance.hodl.exchange.bithumb.PublicApiService
-import com.finance.hodl.exchange.bithumb.fake.FakeBithumbExchange
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -31,7 +31,7 @@ internal object NetworkModule {
     fun providesBithumbPrivateTradeApiService(
         networkJson: Json,
         okhttpCallFactory: Call.Factory
-    ): BithumbTradeApiService = Retrofit.Builder()
+    ): PrivateTradeApiService = Retrofit.Builder()
         .baseUrl("https://api.bithumb.com/")
         .callFactory(okhttpCallFactory)
         .addConverterFactory(
@@ -39,7 +39,22 @@ internal object NetworkModule {
             networkJson.asConverterFactory("application/json".toMediaType()),
         )
         .build()
-        .create(BithumbTradeApiService::class.java)
+        .create(PrivateTradeApiService::class.java)
+
+    @Provides
+    fun providesBithumbPrivateAccountApiService(
+        networkJson: Json,
+        okhttpCallFactory: Call.Factory
+    ): PrivateAccountApiService = Retrofit.Builder()
+        .baseUrl("https://api.bithumb.com/")
+        .callFactory(okhttpCallFactory)
+        .addConverterFactory(
+            @OptIn(ExperimentalSerializationApi::class)
+            networkJson.asConverterFactory("application/json".toMediaType()),
+        )
+        .build()
+        .create(PrivateAccountApiService::class.java)
+
 
     @Provides
     fun providesBithumbPublicRestApi(
