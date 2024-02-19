@@ -7,12 +7,16 @@ import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import src.main.com.finance.hodl.model.data.LimitOrder
+import src.main.com.finance.hodl.model.data.OrderInfo
+import src.main.com.finance.hodl.model.data.OrderType
 import java.math.BigDecimal
 import javax.inject.Inject
 
 
 internal class BithumbExchange @Inject constructor(
     private val publicRestApi: PublicApiService,
+    private val tradeApi: BithumbTradeApiService,
 ) : ExchangeClient {
 
     override fun name():String = "Real Bithumb Exchange"
@@ -23,5 +27,9 @@ internal class BithumbExchange @Inject constructor(
 
     override suspend fun allTickers(currency: String):List<String> {
         return publicRestApi.getAllTicker(currency).data.tickers.keys.toList()
+    }
+
+    override suspend fun placeLimitOrder(order: LimitOrder): OrderInfo {
+        return OrderInfo(OrderType.BUY, "", "", BigDecimal(0), BigDecimal(0))
     }
 }

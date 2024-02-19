@@ -1,5 +1,6 @@
 package com.finance.hodl.exchange.di
 
+import com.finance.hodl.exchange.bithumb.BithumbTradeApiService
 import com.finance.hodl.exchange.bithumb.PublicApiService
 import com.finance.hodl.exchange.bithumb.fake.FakeBithumbExchange
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -25,6 +26,20 @@ internal object NetworkModule {
     fun providesNetworkJson(): Json = Json {
         ignoreUnknownKeys = true
     }
+
+    @Provides
+    fun providesBithumbPrivateTradeApiService(
+        networkJson: Json,
+        okhttpCallFactory: Call.Factory
+    ): BithumbTradeApiService = Retrofit.Builder()
+        .baseUrl("https://api.bithumb.com/")
+        .callFactory(okhttpCallFactory)
+        .addConverterFactory(
+            @OptIn(ExperimentalSerializationApi::class)
+            networkJson.asConverterFactory("application/json".toMediaType()),
+        )
+        .build()
+        .create(BithumbTradeApiService::class.java)
 
     @Provides
     fun providesBithumbPublicRestApi(

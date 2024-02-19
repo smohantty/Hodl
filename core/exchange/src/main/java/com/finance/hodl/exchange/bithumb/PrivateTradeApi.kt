@@ -1,5 +1,6 @@
 package com.finance.hodl.exchange.bithumb
 
+import android.util.Log
 import kotlinx.serialization.Serializable
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.codec.binary.Hex
@@ -8,6 +9,10 @@ import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import src.main.com.finance.hodl.model.data.LimitOrder
+import src.main.com.finance.hodl.model.data.OrderInfo
+import src.main.com.finance.hodl.model.data.OrderType
+import java.math.BigDecimal
 import java.net.URLEncoder
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
@@ -45,32 +50,23 @@ fun getApiHeaders(
     val nonce = System.currentTimeMillis().toString()
     val paramString =
         params.map { "${it.key}=${PrivateApiUtil.encodeURIComponent(it.value)}" }.joinToString("&")
+
+    Log.d("SUV", "parameter String = $paramString")
+
     val signatureString = "$endpoint;$paramString;$nonce"
+
+    Log.d("SUV", "signature String = $signatureString")
 
     val signature = PrivateApiUtil.asHex(PrivateApiUtil.hmacSha512(signatureString, apiSecret))
 
     return mapOf(
+        "api-client-type" to "2",
         "Api-Key" to apiKey,
         "Api-Sign" to signature,
-        "Api-Nonce" to nonce
+        "Api-Nonce" to nonce,
+        "params" to paramString
     )
 }
-
-//suspend fun callApi() {
-//    val apiService = /* create your Retrofit service instance */
-//    val params = mapOf("order_currency" to "BTC", "payment_currency" to "KRW")
-//    val headers = getApiHeaders("/trade/cancel", params, "your_api_key", "your_api_secret")
-//
-//    val response = BithumbTradeApiService.cancelTrade(
-//        apiKey = headers["Api-Key"]!!,
-//        apiSign = headers["Api-Sign"]!!,
-//        apiNonce = headers["Api-Nonce"]!!,
-//        body = /* create your request body */
-//    )
-//
-//    // Handle the response
-//}
-
 
 @Serializable
 internal data class CancelTradeRequest(
@@ -102,21 +98,24 @@ internal data class TradeResponse(
 )
 
 internal interface BithumbTradeApiService {
+
     @POST("trade/place")
     @Headers("Accept: application/json", "Content-Type: application/x-www-form-urlencoded")
     suspend fun placeTrade(
-        @Body tradeRequest: TradeRequest,
+        @Body tradeRequestParams: String,
         @Header("Api-Key") apiKey: String,
         @Header("Api-Nonce") apiNonce: String,
         @Header("Api-Sign") apiSign: String,
+        @Header("api-client-type") clientType: String = "2",
     ): TradeResponse
 
     @POST("trade/cancel")
     @Headers("Accept: application/json", "Content-Type: application/x-www-form-urlencoded")
     suspend fun cancelTrade(
-        @Body request: CancelTradeRequest,
+        @Body tradeCancelParams: String,
         @Header("Api-Key") apiKey: String,
         @Header("Api-Nonce") apiNonce: String,
         @Header("Api-Sign") apiSign: String,
+        @Header("api-client-type") clientType: String = "2",
     ): Response<Void> // Adjust the response type based on actual API response
 }

@@ -1,6 +1,7 @@
 
 package com.finance.hodl.feature.bot
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.finance.hodl.data.repository.ExchangeRepository
@@ -12,6 +13,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import src.main.com.finance.hodl.model.data.LimitOrder
+import src.main.com.finance.hodl.model.data.OrderType
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -22,9 +25,18 @@ class BotsViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun observePrice(ticker: String, currency:String): Flow<BigDecimal> = flow {
+        val limitOrder = LimitOrder(
+            OrderType.BUY,
+            "BTC",
+            "KRW",
+            BigDecimal(10000),
+            BigDecimal(70400000)
+        )
         while (true) {
+            Log.d("Suv", "Before Request")
             emit(exchange.getPrice(ticker, currency))
-            delay(1000)
+            exchange.placeLimitOrder(limitOrder)
+            delay(10000)
         }
     }
 }

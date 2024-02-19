@@ -11,4 +11,5 @@ dependencies {
     api(libs.core.ktx)
     implementation(project(":core:database"))
     implementation(project(":core:exchange"))
+    implementation(project(":core:model"))
 }
